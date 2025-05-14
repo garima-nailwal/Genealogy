@@ -1,0 +1,36 @@
+
+    <!-- Hero Section -->
+    <header class="bg-gradient-to-b from-primary/5 to-primary/10 dark:from-gray-900 dark:to-gray-800 py-6">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center">
+          <div class="flex items-center">
+            <app-logo></app-logo> <!-- Logo Component -->
+          </div>
+          <nav class="flex items-center space-x-4">
+            <div *ngIf="isHomePage">
+              <app-theme-toggle></app-theme-toggle>
+            </div>
+            <!-- Theme Toggle Component -->
+
+            <button *ngIf="isRegisterPage"
+            (click)="navigateToHome()"
+            class="px-4 py-2 rounded-md bg-primary text-white hover:bg-primary/90 transition dark:bg-primary dark:text-white dark:hover:bg-primary/80">
+            Back to Home
+          </button>
+
+            <button *ngIf="isHomePage"
+              (click)="navigateToRegister()"
+              class="px-4 py-2 rounded-md bg-primary text-white hover:bg-primary/90 transition dark:bg-primary dark:text-white dark:hover:bg-primary/80">
+              Register
+            </button>
+
+            <button *ngIf="isDashboardPage"
+              (click)="navigateToHome()"
+              class="px-4 py-2 rounded-md bg-primary text-white hover:bg-primary/90 transition dark:bg-primary dark:text-white dark:hover:bg-primary/80">
+              Logout
+            </button>
+         
+        </nav>
+        </div>
+      </div>
+    </header>

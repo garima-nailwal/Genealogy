@@ -1,0 +1,57 @@
+
+  // Style for invalid inputs with error messages
+  input.error,
+  select.error,
+  textarea.error {
+    @apply border-red-500;
+  }
+  
+  .error-message {
+    @apply absolute text-red-500 text-sm mt-1;
+    left: 0;
+    top: 100%;
+  }
+  
+  button:disabled {
+    @apply opacity-70 cursor-not-allowed;
+  }
+  
+  // Step progress bar styling
+  .step-progress {
+    width: 100%;
+    background-color: #e2e8f0;
+    position: relative;
+    height: 2px;
+  }
+  
+  .step-progress .filled {
+    background-color: #3b82f6;
+    transition: width 0.3s;
+  }
+  
+  // Highlight the active step
+  .step-item.active {
+    @apply bg-primary text-white;
+  }
+  
+  .step-item {
+    @apply w-8 h-8 rounded-full flex items-center justify-center mb-2;
+    background-color: #e2e8f0;
+    color: #4b5563;
+    transition: background-color 0.3s;
+  }
+  
+  .step-item.active {
+    background-color: #3b82f6;
+    color: #fff;
+  }
+  
+  .step-item.complete {
+    background-color: #34d399;
+    color: #fff;
+  }
+
+  ::ng-deep .p-inputtext{
+    padding: 12px 0.75rem !important; 
+  }
+  

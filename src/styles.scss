@@ -1,0 +1,128 @@
+/* You can add global styles to this file, and also import other style files */
+@import "primeng/resources/themes/lara-light-blue/theme.css";
+@import "primeng/resources/primeng.min.css";
+@import "primeicons/primeicons.css";
+
+.p-dropdown-panel{
+  z-index: 9999 !important;
+  position: absolute !important;
+}
+// html, body {
+//   overflow: visible !important;
+// }
+
+.dark .p-card {
+  background-color: rgb(17 24 39 / var(--tw-bg-opacity, 1)) !important; /* Tailwind's gray-800 */
+  color: #ffffff !important;
+  border-color: #374151 !important; /* Tailwind's gray-700 */
+}
+
+.dark .p-card .p-card-header,
+.dark .p-card .p-card-body,
+.dark .p-card .p-card-content {
+  background-color: transparent !important;
+  color: inherit;
+}
+
+// .p-component {
+//   all: initial;
+//   * {
+//     all: unset;
+//   }
+// }
+
+// body {
+//   overflow: visible !important;
+// }
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 250 47% 65%;
+    --primary-foreground: 355.7 100% 97.3%;
+    --secondary: 250 30% 96%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 250 30% 96%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 250 95% 90%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 250 47% 65%;
+    --radius: 0.5rem;
+    --sidebar-background: 250 30% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 250 47% 65%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 250 30% 95%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 250 30% 91%;
+    --sidebar-ring: 250 47% 65%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 250 47% 65%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* PrimeNG popup fix */
+// .p-datepicker,
+// .p-dropdown-panel {
+//   z-index: 9999 !important;
+//   position: absolute !important;
+//   display: block !important;
+// }
+
+// ::ng-deep .p-dropdown-panel,
+// ::ng-deep .p-datepicker {
+//   z-index: 9999 !important;
+// }
+
+// body {
+//   overflow: visible !important;
+// }

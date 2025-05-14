@@ -1,0 +1,15 @@
+<button
+  aria-label="Toggle dark mode"
+  class="inline-flex items-center justify-center rounded-full p-2 transition hover:bg-accent"
+  [disabled]="!mounted"
+  (click)="toggleTheme()"
+  type="button"
+>
+  <ng-container *ngIf="isDark; else lightIcon">
+    <i class="pi pi-sun" style="font-size: 1.25rem; color: #facc15;"></i>
+  </ng-container>
+  <ng-template #lightIcon>
+    <i class="pi pi-moon" style="font-size: 1.25rem; color: #374151;"></i>
+  </ng-template>
+</button>
+

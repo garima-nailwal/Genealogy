@@ -1,0 +1,353 @@
+
+<div class="min-h-screen flex flex-col">
+  <app-topbar></app-topbar>
+    <main class="container mx-auto py-8 px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl mx-auto">
+        <div class="mb-8">
+          <div class="flex justify-between items-center">
+            <!-- circle icons with active tab index for multi-step feature -->
+            <ng-container *ngFor="let step of steps; let i = index">
+              <div class="flex flex-col items-center">
+                <div
+                  class="w-8 h-8 rounded-full flex items-center justify-center mb-2"
+                  [ngClass]="{
+                    'bg-primary text-white': currentStep >= i + 1,
+                    'bg-gray-200 text-gray-500 dark:bg-gray-700 dark:text-gray-300': currentStep < i + 1 }">
+                   {{ i + 1 }} 
+                </div>
+                <span class="text-sm text-gray-600 dark:text-gray-300">{{ step }}</span>
+              </div>
+            </ng-container>
+          </div>
+          
+          <div class="relative mt-2">
+            <div class="absolute top-0 left-0 h-1 bg-gray-200 dark:bg-gray-700 w-full"></div>
+            <div
+              class="absolute top-0 left-0 h-1 bg-primary transition-all duration-300"
+              [style.width.%]="(currentStep - 1) / (steps.length - 1) * 100">
+          </div> 
+          </div>
+
+        </div>
+  
+        <div class="bg-gray-200 dark:bg-gray-800 rounded-lg shadow-md p-6 sm:p-8">
+          <h1 class="text-2xl font-bold text-center mb-6 dark:text-white">Register Your Heritage</h1>
+  
+          <form [formGroup]="registerForm" class="space-y-6">
+            
+            <!-- relationship mode functionality  (ngSubmit)="onSubmit()" -->
+
+            <div *ngIf="mode === 'add-member'" class="relative z-10">
+                <div *ngIf="isModalVisible" class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50" (click)="closeModal()">
+                  <div class="modal-content bg-white p-6 rounded-lg shadow-lg w-96" (click)="$event.stopPropagation()"> <!-- Prevent closing when clicking inside modal -->
+                    <h2 class="text-xl font-semibold mb-4">Select Relationship</h2>
+                    
+                    <!-- Dropdown inside Modal -->
+                    <select formControlName="relationshipTypes" class="px-4 py-3 w-full rounded-md border border-gray-300 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-600 transition-all duration-300 ease-in-out">
+                      <option [value]="null" disabled>Select Relationship</option>
+                      <option *ngFor="let rel of relationshipTypes" [value]="rel.id">
+                        {{ rel.relationship_type }}
+                      </option>
+                    </select>
+
+                    <div class="mt-4 flex justify-end space-x-3">
+                      <button (click)="closeModal()" class="px-4 py-2 bg-red-500 text-white rounded-md flex items-center space-x-2">
+                        <i class="pi pi-times"></i> <!-- PrimeIcon Times -->
+                        <span>Cancel</span>
+                      </button>
+                      <button (click)="confirmSelection()" class="px-4 py-2 bg-blue-500 text-white rounded-md flex items-center space-x-2">
+                        <i class="pi pi-check"></i> <!-- PrimeIcon Checkmark -->
+                        <span>Confirm</span>
+                      </button>
+                      
+                    </div>
+                  </div>
+                </div>
+
+                  
+              </div>
+
+            <ng-container *ngIf="currentStep === 1">
+              
+                                           
+              <!-- Personal Info Fields -->
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-x-6 gap-y-4">
+                <div>
+                  <label for="firstName" class="block text-sm font-semibold text-black dark:text-gray-300">First Name</label>
+                  <input pInputText id="firstName" name="firstName" type="text" 
+                  formControlName="firstName"  required
+                    class=" focus:outline-none focus:ring-2 focus:ring-purple-500 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-600 transition-all duration-300 ease-in-out w-full rounded-md border border-gray-300 px-3 py-2 text-sm placeholder-gray-400 " />
+                    <div *ngIf="f['firstName'].touched && f['firstName'].invalid" class="text-red-500 text-xs mt-1">
+                      Please enter your First Name.
+                    </div> 
+                </div>           
+                    
+                <div>
+                  <label for="middleName" class="block text-sm font-semibold text-black  dark:text-gray-300">Middle Name</label>
+                  <input pInputText id="middleName" name="middleName"
+                  formControlName="middleName" required
+                    class=" w-full rounded-md border border-gray-300 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-600 transition-all duration-300 ease-in-out" />
+                    <div *ngIf="f['middleName'].touched && f['middleName'].invalid" class="text-red-500 text-xs mt-1">
+                      Please enter your Middle Name.
+                    </div>
+                </div>
+                <div>
+                  <label for="lastName" class="block text-sm font-semibold text-black  dark:text-gray-300">Last Name</label>
+                  <input pInputText id="lastName" name="lastName" 
+                  formControlName="lastName" required
+                    class=" px-3 py-2 w-full rounded-md border border-gray-300 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-600 transition-all duration-300 ease-in-out" />
+                    <div *ngIf="f['lastName'].touched && f['lastName'].invalid" class="text-red-500 text-xs mt-1">
+                      Please enter your Last Name.
+                    </div>
+                </div>
+              
+                </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
+               
+                <div >
+                  <label for="birthDate" class="block text-sm font-semibold text-black dark:text-gray-300">Birth Date</label>
+                  <input type="date" 
+                  id="bd" 
+                  name="bd"  
+                  required placeholder="dd/mm/yy"
+                  formControlName="birthDate"
+                  class=" px-4 py-3 w-full rounded-md border border-gray-300 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-600 transition-all duration-300 ease-in-out"/>         
+                  <div *ngIf="f['birthDate'].touched && f['birthDate'].invalid" class="text-red-500 text-xs mt-1">
+                    Please select your Birth Date.
+                  </div>
+                </div>
+
+
+                <div *ngIf="!isModalVisible" class="relative z-10 ">
+                  <label for="gender" class="block text-sm font-semibold text-black dark:text-gray-300">Gender</label>
+                  <select formControlName="gender" class="px-4 py-3 w-full rounded-md border border-gray-300 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-600 transition-all duration-300 ease-in-out">         
+                    <option *ngFor="let gender of genderOptions" [value]="gender.value">
+                      {{ gender.label }}
+                    </option>
+                  </select>
+                  <div *ngIf="f['gender'].touched && f['gender'].invalid" class="text-red-500 text-xs mt-1">
+                    Please select your Gender.
+                  </div>
+                </div>
+              
+              </div>
+      
+            </ng-container>
+  
+            <ng-container *ngIf="currentStep === 2">
+              
+              <!-- Social Info Fields -->
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-x-6 gap-y-4">
+              
+                <div class="relative z-10 ">
+                <label for="maritialstatus" class="block text-sm font-semibold text-black dark:text-gray-300">Maritial Status</label>
+                <select formControlName="maritialstatus" class="mb-6 mt-1 px-4 py-3 w-full rounded-md border border-gray-300 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-600 transition-all duration-300 ease-in-out">         
+                  <option [value]="null" disabled>Select Maritial Status</option>
+                  <option *ngFor="let ms of maritialStatusTypes" [value]="ms.id">
+                    {{ ms.maritial_status }}
+                  </option>
+                </select>
+                <div *ngIf="f['maritialstatus'].touched && f['maritialstatus'].invalid" class="text-red-500 text-xs mt-1">
+                  Please select your Maritial Status.
+                </div>
+              </div>
+              
+              <div class="relative z-10 ">
+                <label for="occupation" class="block text-sm font-semibold text-black dark:text-gray-300">Occupation</label>
+                <select formControlName="occupation" class="mb-6 mt-1 px-4 py-3 w-full rounded-md border border-gray-300 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-600 transition-all duration-300 ease-in-out">         
+                  <option [value]="null" disabled>Select Occupation</option>
+                  <option *ngFor="let occ of occupationTypes" [value]="occ.id">
+                    {{ occ.occupation_name }}
+                  </option>
+                </select>
+                <div *ngIf="f['occupation'].touched && f['occupation'].invalid" class="text-red-500 text-xs mt-1">
+                  Please select your Occupation.
+                </div>
+              </div>
+
+              <div class="relative z-10 ">
+                <label for="religion" class="block text-sm font-semibold text-black dark:text-gray-300">Religion</label>
+                <select formControlName="religion" class="mb-6 mt-1 px-4 py-3 w-full rounded-md border border-gray-300 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-600 transition-all duration-300 ease-in-out">         
+                  <option [value]="null" disabled>Select Religion</option>
+                  <option *ngFor="let rel of religionTypes" [value]="rel.id">
+                    {{ rel.religion_name }}
+                  </option>
+                </select>
+                <div *ngIf="f['religion'].touched && f['religion'].invalid" class="text-red-500 text-xs mt-1">
+                  Please select your Religion.
+                </div>
+              </div>
+
+            </div>
+          </ng-container>
+  
+            <ng-container *ngIf="currentStep === 3">
+              <!-- Contact Info Fields -->
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-x-6 gap-y-4">
+              
+                <div class="relative z-10 ">
+                <label for="caste" class="block text-sm font-semibold text-black dark:text-gray-300">Caste</label>
+                <select formControlName="caste" class="w-full px-3 py-3 rounded-md border border-gray-300 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-600 transition-all duration-300 ease-in-out">
+                  <option [value]="null" disabled>Select Caste</option>
+                  <option *ngFor="let caste of casteTypes" [value]="caste.id">
+                    {{ caste.caste_name }}
+                  </option>
+                </select>
+                <div *ngIf="f['caste'].touched && f['caste'].invalid" class="text-red-500 text-xs mt-1">
+                  Please select your Caste.
+                </div>
+                <!-- class="mb-6 mt-1 px-3 py-3 w-full rounded-md border border-gray-300 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-600 transition-all duration-300 ease-in-out">          -->
+              </div>
+
+              <div>
+                <label for="mobile" class="block text-sm font-semibold text-black  dark:text-gray-300">Mobile Number</label>
+                <input pInputText id="mobile" type="text" 
+                formControlName="mobile" placeholder=" 10 digit mobile number" required
+                  class="h-auto  px-3 py-2 w-full rounded-md border border-gray-300 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-600 transition-all duration-300 ease-in-out" />
+                  <div *ngIf="f['mobile'].touched && f['mobile'].invalid" class="text-red-500 text-xs mt-1">
+                    Please enter a valid 10-digit Mobile Number.
+                  </div>
+              </div>
+
+              <div>
+                <label for="lastName" class="block text-sm font-semibold text-black  dark:text-gray-300">Email</label>
+                <input pInputText id="email"
+                type="email" 
+                placeholder="email"
+                formControlName="email" required
+                  class=" px-3 py-2 w-full rounded-md border border-gray-300 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-600 transition-all duration-300 ease-in-out" />
+                  <div *ngIf="f['email'].touched && f['email'].invalid" class="text-red-500 text-xs mt-1">
+                    Please enter a valid Email.
+                  </div>
+              </div>
+              
+            </div>
+          </ng-container>
+  
+            <ng-container *ngIf="currentStep === 4">
+              <!-- Location Info Fields -->
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
+
+              <div class="relative z-10 ">
+                  <label for="caste" class="block text-sm font-semibold text-black dark:text-gray-300">State</label>
+                  <select formControlName="state" class="w-full px-3 py-3 rounded-md border border-gray-300 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-600 transition-all duration-300 ease-in-out">
+                    <option [value]="null" disabled>Select State</option>
+                    <option *ngFor="let s of stateTypes" [value]="s.id">
+                      {{s.state }}
+                    </option>
+                  </select>
+                  <div *ngIf="f['state'].touched && f['state'].invalid" class="text-red-500 text-xs mt-1">
+                    Please select your State.
+                  </div>
+              </div>
+
+              <div class="relative z-10 ">
+                <label for="caste" class="block text-sm font-semibold text-black dark:text-gray-300">District</label>
+                <select formControlName="district" class="w-full px-3 py-3 rounded-md border border-gray-300 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-600 transition-all duration-300 ease-in-out">
+                  <option [value]="null" disabled>Select District</option>
+                  <option *ngFor="let d of districtTypes" [value]="d.id">
+                    {{ d.district }}
+                  </option>
+                </select>
+                <div *ngIf="f['district'].touched && f['district'].invalid" class="text-red-500 text-xs mt-1">
+                  Please select your District.
+                </div>
+              </div>
+            
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
+            <div>
+              <label for="city" class="block text-sm font-semibold text-black  dark:text-gray-300">City/Village</label>
+              <input pInputText id="city" name="city" 
+              formControlName="city" placeholder="city" required
+                class=" px-3 py-2 w-full rounded-md border border-gray-300 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-600 transition-all duration-300 ease-in-out" />
+                <div *ngIf="f['city'].touched && f['city'].invalid" class="text-red-500 text-xs mt-1">
+                  Please enter your City or Village.
+                </div>
+            </div>
+
+            <div>
+              <label for="pincode" class="block text-sm font-semibold text-black  dark:text-gray-300">Pincode</label>
+              <input pInputText id="pincode" name="pincode" 
+              formControlName="pincode" placeholder="pincode" required
+                class=" px-3 py-2 w-full rounded-md border border-gray-300 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-600 transition-all duration-300 ease-in-out" />
+                <div *ngIf="f['pincode'].touched && f['pincode'].invalid" class="text-red-500 text-xs mt-1">
+                  Please enter your Pincode.
+                </div>
+            </div>
+          
+          </div>
+
+            <div class="relative z-10 ">
+                <label for="caste" class="block text-sm font-semibold text-black dark:text-gray-300">Permanent Address</label>
+                <textarea formControlName="address" placeholder="Address" class="w-full px-3 py-3 rounded-md border border-gray-300 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-600 transition-all duration-300 ease-in-out"></textarea>
+                <div *ngIf="f['address'].touched && f['address'].invalid" class="text-red-500 text-xs mt-1">
+                  Please enter your Address.
+                </div>
+            </div>
+              
+            </ng-container> 
+           
+          
+  
+            <!-- <div class="flex justify-between">
+              <button *ngIf="currentStep > 1" type="button" (click)="prevStep()" class="px-4 py-2 rounded-md bg-primary text-white hover:bg-primary/90 transition dark:bg-primary dark:text-white dark:hover:bg-primary/80">Previous</button>
+             
+              <button *ngIf="currentStep < 4" type="button" (click)="nextStep()" class=" ml-auto px-4 py-2 rounded-md bg-primary text-white hover:bg-primary/90 transition dark:bg-primary dark:text-white dark:hover:bg-primary/80">Next</button>
+              
+              <button *ngIf="currentStep === 4" type="submit" class="btn-primary ml-auto px-4 py-2 rounded-md bg-primary text-white hover:bg-primary/90 transition dark:bg-primary dark:text-white dark:hover:bg-primary/80" [disabled]="isSubmitting">
+                {{ isSubmitting ? 'Processing...' : (mode === 'add-member' ? 'Add Family Member' : 'Submit Registration') }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
+  </div> -->
+
+          <div *ngIf="showOtpInput" class="space-y-4 mt-4">
+            <h3 class="text-sm font-semibold text-black dark:text-gray-300">
+              Enter OTP
+            </h3>
+            <div class="flex items-center space-x-2">
+              <input
+                pInputText
+                [(ngModel)]="otp"
+                [ngModelOptions]="{standalone: true}"
+                placeholder="Enter 6-digit OTP"
+                maxlength="6"
+                [class.p-invalid]="otpError"
+                class="w-full transition-all duration-300 ease-in-out border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-600"
+                (keypress)="$event.charCode >= 48 && $event.charCode <= 57"/>
+            </div>
+            <p *ngIf="otpError" class="text-sm text-red-500">{{ otpError }}</p>
+          </div>
+
+          <div class="flex justify-between">
+            <button *ngIf="currentStep > 1 && !showOtpInput" type="button" (click)="prevStep()" class="px-4 py-2 rounded-md bg-primary text-white hover:bg-primary/90 transition dark:bg-primary dark:text-white dark:hover:bg-primary/80">Previous</button>
+          
+            <button *ngIf="currentStep < 4 && !showOtpInput" type="button" (click)="nextStep()" class="ml-auto px-4 py-2 rounded-md bg-primary text-white hover:bg-primary/90 transition dark:bg-primary dark:text-white dark:hover:bg-primary/80">Next</button>
+            
+            <button
+              *ngIf="currentStep === 4 || showOtpInput"
+              type="submit"
+              [disabled]="isLoading"
+              (click)="showOtpInput ? handleOtpVerification() : handleRegistration()"
+              class="w-full py-3 mt-3 text-white transition rounded-md bg-primary hover:bg-primary/90 disabled:opacity-70 dark:bg-primary dark:text-white dark:hover:bg-primary/80"
+            >
+              {{ isLoading ? 'Processing...' : (showOtpInput ? 'Verify OTP' : 'Register') }}
+            </button>
+          </div>
+
+          <div *ngIf="error" class="mt-4 text-sm text-red-500">
+            {{ error }}
+          </div>
+        </form>
+        </div>
+    </div>
+  </main>
+</div>
+  
