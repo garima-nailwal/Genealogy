@@ -109,7 +109,8 @@ export class RegisterComponent implements OnInit {
       address: ['', Validators.required],
       city: ['', Validators.required],
       pincode: ['', Validators.required],
-      relationshipTypes: [null, this.mode === 'add-member' ? Validators.required : []]
+      relationshipTypes: [null, this.mode === 'add-member' ? Validators.required : []],
+      otp: ['', [Validators.required, Validators.pattern('^[0-9]{6}$')]]
 
     });
 
@@ -323,7 +324,32 @@ export class RegisterComponent implements OnInit {
   }
 
   onSubmit(): void {
+ // Step 1: Handle OTP Verification if OTP field is visible
+ if (this.showOtpInput) {
+  if (this.validateOtp()) {
+    this.isLoading = true;
+    const otpVerification: OtpVerification = {
+      email: this.formData.email,
+      otp: this.otp
+    };
 
+    this.userService.verifyRegistrationOtp(otpVerification).subscribe({
+      next: (response) => {
+        console.log('OTP Verification Successful:', response);
+        this.isLoading = false;
+        this.router.navigate(['/dashboard']);
+      },
+      error: (error) => {
+        console.error('OTP Verification Failed:', error);
+        this.isLoading = false;
+        this.otpError = error.error?.message || 'Invalid OTP. Please try again.';
+      }
+    });
+  }
+  return; // Stop further execution after handling OTP
+}
+
+// Handle Registration or Add-Member Flow
     if (this.mode === 'add-member') {
       this.addFamilyMember();
     } else {
@@ -458,65 +484,65 @@ export class RegisterComponent implements OnInit {
     return true;
   }
 
-  handleRegistration() {
-    if (this.validateForm()) {
-      this.isLoading = true;
-      const formData = this.registerForm.value;
+  // handleRegistration() {
+  //   if (this.validateForm()) {
+  //     this.isLoading = true;
+  //     const formData = this.registerForm.value;
       
-      const registrationData = {
-        first_name: formData.firstName,
-        middle_name: formData.middleName,
-        last_name: formData.lastName,
-        birth_date: formData.birthDate,
-        gender: formData.gender === 'M' ? 1 : formData.gender === 'F' ? 2 : 3,
-        email: formData.email,
-        mobile_number: formData.mobile,
-        state_id: formData.state,
-        district_id: formData.district,
-        religion_id: formData.religion,
-        caste_id: formData.caste,
-        occupation_id: formData.occupation,
-        maritial_status: formData.maritialstatus,
-        permanent_address: formData.address,
-        city: formData.city,
-        pincode: formData.pincode,
-        // status: 'Pending'
-      };
+  //     const registrationData = {
+  //       first_name: formData.firstName,
+  //       middle_name: formData.middleName,
+  //       last_name: formData.lastName,
+  //       birth_date: formData.birthDate,
+  //       gender: formData.gender === 'M' ? 1 : formData.gender === 'F' ? 2 : 3,
+  //       email: formData.email,
+  //       mobile_number: formData.mobile,
+  //       state_id: formData.state,
+  //       district_id: formData.district,
+  //       religion_id: formData.religion,
+  //       caste_id: formData.caste,
+  //       occupation_id: formData.occupation,
+  //       maritial_status: formData.maritialstatus,
+  //       permanent_address: formData.address,
+  //       city: formData.city,
+  //       pincode: formData.pincode,
+  //       // status: 'Pending'
+  //     };
 
-      console.log('Sending registration data:', registrationData);
+  //     console.log('Sending registration data:', registrationData);
 
-      this.userService.submitUserRegistration(registrationData).subscribe({
-        next: (response) => {
-          console.log('Registration response:', response);
-          // After successful registration, send OTP
-          const otpRequest: OtpRequest = {
-            email: formData.email
-          };
+  //     this.userService.submitUserRegistration(registrationData).subscribe({
+  //       next: (response) => {
+  //         console.log('Registration response:', response);
+  //         // After successful registration, send OTP
+  //         const otpRequest: OtpRequest = {
+  //           email: formData.email
+  //         };
 
-          console.log('Sending OTP request:', otpRequest);
-          this.userService.sendRegistrationOtp(otpRequest).subscribe({
-            next: (otpResponse) => {
-              console.log('OTP response:', otpResponse);
-              this.isLoading = false;
-              this.showOtpInput = true;
-              this.error = '';
-              this.formData = formData;
-            },
-            error: (error) => {
-              console.error('OTP error:', error);
-              this.isLoading = false;
-              this.error = error.error?.message || 'Failed to send OTP. Please try again.';
-            }
-          });
-        },
-        error: (error) => {
-          console.error('Registration error:', error);
-          this.isLoading = false;
-          this.error = error.error?.message || 'Registration failed. Please try again.';
-        }
-      });
-    }
-  }
+  //         console.log('Sending OTP request:', otpRequest);
+  //         this.userService.sendRegistrationOtp(otpRequest).subscribe({
+  //           next: (otpResponse) => {
+  //             console.log('OTP response:', otpResponse);
+  //             this.isLoading = false;
+  //             this.showOtpInput = true;
+  //             this.error = '';
+  //             this.formData = formData;
+  //           },
+  //           error: (error) => {
+  //             console.error('OTP error:', error);
+  //             this.isLoading = false;
+  //             this.error = error.error?.message || 'Failed to send OTP. Please try again.';
+  //           }
+  //         });
+  //       },
+  //       error: (error) => {
+  //         console.error('Registration error:', error);
+  //         this.isLoading = false;
+  //         this.error = error.error?.message || 'Registration failed. Please try again.';
+  //       }
+  //     });
+  //   }
+  // }
 
       handleOtpVerification() {
         if (this.validateOtp()) {
